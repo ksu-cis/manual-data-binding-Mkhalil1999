@@ -23,5 +23,39 @@ namespace ManualDataBinding.UI
         {
             InitializeComponent();
         }
+
+        private Note note;
+        /// <summary>
+        /// The Note that will be edited
+        /// </summary>
+        public Note Note
+        {
+            get { return note; }
+            set
+            {
+                if (note == value) return;
+                if (note != null) note.NoteChanged -= OnNoteChanged;
+                note = value;
+                if (note != null)
+                {
+                    note.NoteChanged += OnNoteChanged;
+                    OnNoteChanged(note, new EventArgs());
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Event handler for when the Note changes
+        /// </summary>
+        /// <param name="sender">The Note instance that is changing</param>
+        /// <param name="e">The event arguments describing the event</param>
+        public void OnNoteChanged(object sender, EventArgs e)
+        {
+            if (Note == null) return; // Can't update a non-existant note
+            Title.Text = Note.Title;
+            Body.Text = Note.Body;
+        }
+
     }
 }
